@@ -1,0 +1,45 @@
+version: '2'
+
+services:
+  # nginx-proxy
+  proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      # コンテナイベントの取得のためにdocker.sockをro[Read Only]でマウント
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./volumes/server/:/etc/nginx/certs:ro
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+
+    restart: always
+    privileged: true
+
+  db:
+    build: ./docker/mysql
+    environment:
+        MYSQL_DATABASE: "test"
+        MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+        MYSQL_USER: python
+        MYSQL_PASSWORD: python
+        TZ: "Asia/Tokyo"
+    volumes:
+      - ./db-datadir:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+
+  django:
+    build: ./docker/django
+    command: python3 manage.py runserver 0.0.0.0:80
+    volumes:
+      - ./src/django/app:/code
+    volumes:
+      - .:/code
+    expose:
+      - "80"
+    links:
+      - db
+    environment:
+      VIRTUAL_HOST: app.*
