@@ -32,11 +32,9 @@ services:
 
   django:
     build: ./docker/django
-    command: python3 manage.py runserver 0.0.0.0:80
+    command: python3 /code/manage.py runserver 0.0.0.0:80
     volumes:
-      - ./src/django/app:/code
-    volumes:
-      - .:/code
+      - ./src/mysite:/code
     expose:
       - "80"
     links:
