@@ -75,8 +75,11 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'test', # DB名を設定
+        'USER': 'python', # DBへ接続するユーザIDを設定
+        'PASSWORD': 'python', # DBへ接続するユーザIDのパスワードを設定
+        'HOST': 'db',
     }
 }
 
