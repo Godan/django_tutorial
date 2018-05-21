@@ -1,6 +1,7 @@
 FROM mysql:latest
 
 ADD log.cnf /etc/mysql/conf.d/log.cnf
+ADD my.cnf /etc/mysql/conf.d/my.cnf
 
 RUN chmod 644 /etc/mysql/conf.d/log.cnf
 
